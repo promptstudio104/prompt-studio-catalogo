@@ -1,1 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Catálogo de Ensaios | Fê Garcia</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f4f1;
+  color: #262626;
+}
+
+header {
+  padding: 38px 20px 24px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+header p {
+  margin: 10px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.filtros {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  padding: 8px 16px 22px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.filtros::-webkit-scrollbar {
+  display: none;
+}
+
+.filtros button {
+  flex: 0 0 auto;
+  border: 1px solid #d9d2cc;
+  background: white;
+  color: #333;
+  border-radius: 30px;
+  padding: 10px 17px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filtros button.ativo {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
+.galeria {
+  padding: 0 12px 100px;
+  columns: 2;
+  column-gap: 10px;
+}
+
+.foto {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.foto img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.foto.selecionada img {
+  outline: 4px solid #222;
+  outline-offset: -4px;
+}
+
+.check {
+  display: none;
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #222;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.foto.selecionada .check {
+  display: flex;
+}
+
+.barra {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,.96);
+  border-top: 1px solid #ddd;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+}
+
+#contador {
+  font-size: 14px;
+  color: #555;
+}
+
+#enviar {
+  border: 0;
+  background: #222;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 30px;
+  font-size: 14px;
+}
+
+#enviar:disabled {
+  opacity: .35;
+}
+
+@media (min-width: 700px) {
+  .galeria {
+    columns: 3;
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  .filtros {
+    justify-content: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Escolha suas referências</h1>
+  <p>Toque nas fotos que você mais gostou.</p>
+</header>
+
+<div class="filtros">
+  <button class="ativo" onclick="filtrar('todas',this)">Todas</button>
+  <button onclick="filtrar('aniversario',this)">Aniversário</button>
+  <button onclick="filtrar('academia',this)">Academia</button>
+  <button onclick="filtrar('profissional',this)">Profissional</button>
+  <button onclick="filtrar('lifestyle',this)">Lifestyle</button>
+  <button onclick="filtrar('luxo',this)">Luxo</button>
+  <button onclick="filtrar('clean',this)">Clean</button>
+</div>
+
+<div class="galeria" id="galeria"></div>
+
+<div class="barra">
+  <span id="contador">0 fotos selecionadas</span>
+  <button id="enviar" disabled onclick="enviar()">Enviar escolhas</button>
+</div>
+
+<script>
+
+const categorias = {
+  aniversario: 50,
+  academia: 50,
+  profissional: 50,
+  lifestyle: 50,
+  luxo: 50,
+  clean: 50
+};
+
+const prefixos = {
+  aniversario: "ANI",
+  academia: "ACA",
+  profissional: "PRO",
+  lifestyle: "LIF",
+  luxo: "LUX",
+  clean: "CLE"
+};
+
+let selecionadas = [];
+let fotos = [];
+
+function carregarFotos() {
+
+  Object.keys(categorias).forEach(categoria => {
+
+    const quantidade = categorias[categoria];
+    const prefixo = prefixos[categoria];
+
+    for(let i = 1; i <= quantidade; i++) {
+
+      const numero = String(i).padStart(3,"0");
+
+      fotos.push({
+        categoria: categoria,
+        nome: prefixo + numero + ".jpg",
+        src: categoria + "/" + prefixo + numero + ".jpg"
+      });
+
+    }
+
+  });
+
+  mostrarFotos("todas");
+}
+
+function mostrarFotos(categoria) {
+
+  const galeria = document.getElementById("galeria");
+  galeria.innerHTML = "";
+
+  const lista = categoria === "todas"
+    ? fotos
+    : fotos.filter(f => f.categoria === categoria);
+
+  lista.forEach(foto => {
+
+    const item = document.createElement("div");
+    item.className = "foto";
+
+    if(selecionadas.includes(foto.nome)) {
+      item.classList.add("selecionada");
+    }
+
+    const img = document.createElement("img");
+    img.src = foto.src;
+    img.loading = "lazy";
+
+    img.onerror = function() {
+      item.remove();
+    };
+
+    const check = document.createElement("div");
+    check.className = "check";
+    check.innerHTML = "✓";
+
+    item.appendChild(img);
+    item.appendChild(check);
+
+    item.onclick = function() {
+      selecionar(foto.nome,item);
+    };
+
+    galeria.appendChild(item);
+
+  });
+}
+
+function selecionar(nome,item) {
+
+  if(selecionadas.includes(nome)) {
+    selecionadas = selecionadas.filter(f => f !== nome);
+    item.classList.remove("selecionada");
+  } else {
+    selecionadas.push(nome);
+    item.classList.add("selecionada");
+  }
+
+  atualizarContador();
+}
+
+function atualizarContador() {
+
+  const contador = document.getElementById("contador");
+  const enviar = document.getElementById("enviar");
+
+  contador.textContent =
+    selecionadas.length +
+    (selecionadas.length === 1
+      ? " foto selecionada"
+      : " fotos selecionadas");
+
+  enviar.disabled = selecionadas.length === 0;
+}
+
+function filtrar(categoria,botao) {
+
+  document.querySelectorAll(".filtros button")
+    .forEach(b => b.classList.remove("ativo"));
+
+  botao.classList.add("ativo");
+
+  mostrarFotos(categoria);
+}
+
+function enviar() {
+
+  const texto =
+    "Olá! Estas são as referências que escolhi:%0A%0A" +
+    selecionadas.map(f => "• " + f).join("%0A");
+
+  window.open(
+    "https://wa.me/?text=" + texto,
+    "_blank"
+  );
+}
+
+carregarFotos();
+
+</script>
+
+</body>
+</html>
