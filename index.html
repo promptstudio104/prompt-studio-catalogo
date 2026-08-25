@@ -7,6 +7,7 @@
 <title>Catálogo de Ensaios | Fê Garcia</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -117,7 +118,7 @@ header p {
   right: 0;
   background: rgba(255,255,255,.97);
   border-top: 1px solid #ddd;
-  padding: 12px 16px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,121 +142,311 @@ header p {
 
 #enviar:disabled {
   opacity: .35;
+  cursor: default;
 }
 
 @media (min-width: 700px) {
+
   .galeria {
     columns: 3;
     max-width: 1100px;
     margin: auto;
   }
+
 }
+
+@media (max-width: 699px) {
+
+  .filtros {
+    justify-content: flex-start;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
+
   <h1>Escolha suas referências</h1>
-  <p>Toque nas fotos que você mais gostou.</p>
+
+  <p>
+    Toque nas fotos que você mais gostou.
+  </p>
+
 </header>
 
+
 <div class="filtros">
-  <button class="ativo" onclick="filtrar('todas', this)">Todas</button>
-  <button onclick="filtrar('aniversario', this)">Aniversário</button>
-  <button onclick="filtrar('academia', this)">Academia</button>
-  <button onclick="filtrar('profissional', this)">Profissional</button>
-  <button onclick="filtrar('lifestyle', this)">Lifestyle</button>
-  <button onclick="filtrar('luxo', this)">Luxo</button>
-  <button onclick="filtrar('clean', this)">Clean</button>
+
+  <button
+    class="ativo"
+    onclick="filtrar('todas', this)">
+    Todas
+  </button>
+
+  <button
+    onclick="filtrar('aniversario', this)">
+    Aniversário
+  </button>
+
+  <button
+    onclick="filtrar('academia', this)">
+    Academia
+  </button>
+
+  <button
+    onclick="filtrar('profissional', this)">
+    Profissional
+  </button>
+
+  <button
+    onclick="filtrar('lifestyle', this)">
+    Lifestyle
+  </button>
+
+  <button
+    onclick="filtrar('luxo', this)">
+    Luxo
+  </button>
+
+  <button
+    onclick="filtrar('clean', this)">
+    Clean
+  </button>
+
 </div>
 
-<div class="galeria" id="galeria"></div>
+
+<div
+  class="galeria"
+  id="galeria">
+</div>
+
 
 <div class="barra">
-  <span id="contador">0 fotos selecionadas</span>
-  <button id="enviar" disabled onclick="enviar()">
+
+  <span id="contador">
+    0 fotos selecionadas
+  </span>
+
+  <button
+    id="enviar"
+    disabled
+    onclick="enviar()">
+
     Enviar escolhas
+
   </button>
+
 </div>
+
 
 <script>
 
+/*
+====================================
+CONFIGURAÇÃO DAS CATEGORIAS
+====================================
+*/
+
 const categorias = {
-  aniversario: "aniv",
-  academia: "acad",
-  profissional: "prof",
-  lifestyle: "life",
-  luxo: "luxo",
-  clean: "clean"
+
+  aniversario: {
+    prefixo: "aniv",
+    extensao: "jpg"
+  },
+
+  academia: {
+    prefixo: "acad",
+    extensao: "jpg"
+  },
+
+  profissional: {
+    prefixo: "prof",
+    extensao: "jpg"
+  },
+
+  lifestyle: {
+    prefixo: "vida",
+    extensao: "jpeg"
+  },
+
+  luxo: {
+    prefixo: "luxo",
+    extensao: "jpg"
+  },
+
+  clean: {
+    prefixo: "clean",
+    extensao: "jpg"
+  }
+
 };
+
+
+/*
+O site procura até 100 imagens
+de cada categoria.
+
+Arquivos que não existem
+simplesmente não aparecem.
+*/
 
 const MAXIMO = 100;
 
+
 let fotos = [];
+
 let selecionadas = [];
+
+
+/*
+====================================
+CARREGAR FOTOS
+====================================
+*/
 
 function carregarFotos() {
 
   Object.keys(categorias).forEach(categoria => {
 
-    const prefixo = categorias[categoria];
+    const configuracao =
+      categorias[categoria];
 
-    for (let i = 1; i <= MAXIMO; i++) {
+    const prefixo =
+      configuracao.prefixo;
 
-      const nome = prefixo + i + ".jpg";
+    const extensao =
+      configuracao.extensao;
+
+
+    for (
+      let i = 1;
+      i <= MAXIMO;
+      i++
+    ) {
+
+      const nome =
+        prefixo +
+        i +
+        "." +
+        extensao;
+
 
       fotos.push({
+
         categoria: categoria,
+
         nome: nome
+
       });
 
     }
 
   });
 
+
   mostrarFotos("todas");
+
 }
+
+
+/*
+====================================
+MOSTRAR FOTOS
+====================================
+*/
 
 function mostrarFotos(categoria) {
 
-  const galeria = document.getElementById("galeria");
+  const galeria =
+    document.getElementById("galeria");
+
 
   galeria.innerHTML = "";
 
-  const lista = categoria === "todas"
-    ? fotos
-    : fotos.filter(foto => foto.categoria === categoria);
+
+  const lista =
+    categoria === "todas"
+
+      ? fotos
+
+      : fotos.filter(
+          foto =>
+            foto.categoria === categoria
+        );
+
 
   lista.forEach(foto => {
 
-    const item = document.createElement("div");
+
+    const item =
+      document.createElement("div");
+
+
     item.className = "foto";
 
-    if (selecionadas.includes(foto.nome)) {
-      item.classList.add("selecionada");
+
+    if (
+      selecionadas.includes(foto.nome)
+    ) {
+
+      item.classList.add(
+        "selecionada"
+      );
+
     }
 
-    const img = document.createElement("img");
+
+    const img =
+      document.createElement("img");
+
 
     img.src = foto.nome;
+
     img.alt = foto.nome;
+
     img.loading = "lazy";
 
+
+    /*
+    Se o arquivo não existir,
+    ele é removido da galeria.
+    */
+
     img.onerror = function() {
+
       item.remove();
+
     };
 
-    const check = document.createElement("div");
+
+    const check =
+      document.createElement("div");
+
+
     check.className = "check";
+
     check.innerHTML = "✓";
 
+
     item.appendChild(img);
+
     item.appendChild(check);
 
+
     item.onclick = function() {
-      selecionar(foto.nome, item);
+
+      selecionar(
+        foto.nome,
+        item
+      );
+
     };
+
 
     galeria.appendChild(item);
 
@@ -263,69 +454,179 @@ function mostrarFotos(categoria) {
 
 }
 
+
+/*
+====================================
+SELECIONAR FOTO
+====================================
+*/
+
 function selecionar(nome, item) {
 
-  if (selecionadas.includes(nome)) {
+
+  if (
+    selecionadas.includes(nome)
+  ) {
+
 
     selecionadas =
-      selecionadas.filter(foto => foto !== nome);
+      selecionadas.filter(
+        foto => foto !== nome
+      );
 
-    item.classList.remove("selecionada");
+
+    item.classList.remove(
+      "selecionada"
+    );
+
 
   } else {
 
+
     selecionadas.push(nome);
 
-    item.classList.add("selecionada");
+
+    item.classList.add(
+      "selecionada"
+    );
 
   }
 
+
   atualizarContador();
+
 }
+
+
+/*
+====================================
+CONTADOR
+====================================
+*/
 
 function atualizarContador() {
 
+
   const contador =
-    document.getElementById("contador");
+    document.getElementById(
+      "contador"
+    );
+
 
   const enviar =
-    document.getElementById("enviar");
+    document.getElementById(
+      "enviar"
+    );
+
 
   contador.textContent =
+
     selecionadas.length +
-    (selecionadas.length === 1
+
+    (
+      selecionadas.length === 1
+
       ? " foto selecionada"
-      : " fotos selecionadas");
+
+      : " fotos selecionadas"
+    );
+
 
   enviar.disabled =
     selecionadas.length === 0;
+
 }
 
-function filtrar(categoria, botao) {
+
+/*
+====================================
+FILTROS
+====================================
+*/
+
+function filtrar(
+  categoria,
+  botao
+) {
+
 
   document
-    .querySelectorAll(".filtros button")
-    .forEach(b => b.classList.remove("ativo"));
+    .querySelectorAll(
+      ".filtros button"
+    )
+    .forEach(
+      b =>
+        b.classList.remove(
+          "ativo"
+        )
+    );
 
-  botao.classList.add("ativo");
 
-  mostrarFotos(categoria);
+  botao.classList.add(
+    "ativo"
+  );
+
+
+  mostrarFotos(
+    categoria
+  );
+
 }
+
+
+/*
+====================================
+ENVIAR PELO WHATSAPP
+====================================
+*/
 
 function enviar() {
 
-  const mensagem =
-    "Olá! Estas são as referências que escolhi:\n\n" +
+
+  const lista =
     selecionadas
-      .map(foto => "• " + foto.replace(".jpg", ""))
+      .slice()
+      .sort();
+
+
+  const mensagem =
+
+    "Olá! Estas são as referências que escolhi:\n\n" +
+
+    lista
+      .map(
+        foto =>
+          "• " +
+          foto.replace(
+            /\.(jpg|jpeg|png)$/i,
+            ""
+          )
+      )
       .join("\n");
 
-  window.open(
+
+  const url =
+
     "https://wa.me/?text=" +
-    encodeURIComponent(mensagem),
+
+    encodeURIComponent(
+      mensagem
+    );
+
+
+  window.open(
+    url,
     "_blank"
   );
+
 }
+
+
+/*
+====================================
+INICIAR CATÁLOGO
+====================================
+*/
 
 carregarFotos();
 
