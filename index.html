@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Escolha suas referências | Fê Garcia</title>
+<title>Catálogo de Ensaios | Fê Garcia</title>
 
 <style>
 * {
@@ -19,7 +19,7 @@ body {
 }
 
 header {
-  padding: 35px 20px 25px;
+  padding: 35px 20px 20px;
   text-align: center;
 }
 
@@ -35,6 +35,36 @@ header p {
   font-size: 14px;
 }
 
+.filtros {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  padding: 8px 16px 22px;
+  justify-content: center;
+  scrollbar-width: none;
+}
+
+.filtros::-webkit-scrollbar {
+  display: none;
+}
+
+.filtros button {
+  flex: 0 0 auto;
+  border: 1px solid #d9d2cc;
+  background: white;
+  color: #333;
+  border-radius: 30px;
+  padding: 10px 17px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filtros button.ativo {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
 .galeria {
   padding: 0 12px 100px;
   columns: 2;
@@ -42,9 +72,9 @@ header p {
 }
 
 .foto {
-  position: relative;
-  margin-bottom: 10px;
   break-inside: avoid;
+  margin-bottom: 10px;
+  position: relative;
   cursor: pointer;
 }
 
@@ -69,7 +99,7 @@ header p {
   height: 30px;
   border-radius: 50%;
   background: #222;
-  color: #fff;
+  color: white;
   align-items: center;
   justify-content: center;
   font-size: 17px;
@@ -87,7 +117,7 @@ header p {
   right: 0;
   background: rgba(255,255,255,.97);
   border-top: 1px solid #ddd;
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -111,7 +141,6 @@ header p {
 
 #enviar:disabled {
   opacity: .35;
-  cursor: default;
 }
 
 @media (min-width: 700px) {
@@ -131,6 +160,16 @@ header p {
   <p>Toque nas fotos que você mais gostou.</p>
 </header>
 
+<div class="filtros">
+  <button class="ativo" onclick="filtrar('todas', this)">Todas</button>
+  <button onclick="filtrar('aniversario', this)">Aniversário</button>
+  <button onclick="filtrar('academia', this)">Academia</button>
+  <button onclick="filtrar('profissional', this)">Profissional</button>
+  <button onclick="filtrar('lifestyle', this)">Lifestyle</button>
+  <button onclick="filtrar('luxo', this)">Luxo</button>
+  <button onclick="filtrar('clean', this)">Clean</button>
+</div>
+
 <div class="galeria" id="galeria"></div>
 
 <div class="barra">
@@ -142,24 +181,65 @@ header p {
 
 <script>
 
-const MAX_FOTOS = 200;
+const categorias = {
+  aniversario: "aniv",
+  academia: "acad",
+  profissional: "prof",
+  lifestyle: "life",
+  luxo: "luxo",
+  clean: "clean"
+};
 
+const MAXIMO = 100;
+
+let fotos = [];
 let selecionadas = [];
 
 function carregarFotos() {
 
+  Object.keys(categorias).forEach(categoria => {
+
+    const prefixo = categorias[categoria];
+
+    for (let i = 1; i <= MAXIMO; i++) {
+
+      const nome = prefixo + i + ".jpg";
+
+      fotos.push({
+        categoria: categoria,
+        nome: nome
+      });
+
+    }
+
+  });
+
+  mostrarFotos("todas");
+}
+
+function mostrarFotos(categoria) {
+
   const galeria = document.getElementById("galeria");
 
-  for (let i = 1; i <= MAX_FOTOS; i++) {
+  galeria.innerHTML = "";
 
-    const nome = "ref" + i + ".jpg";
+  const lista = categoria === "todas"
+    ? fotos
+    : fotos.filter(foto => foto.categoria === categoria);
+
+  lista.forEach(foto => {
 
     const item = document.createElement("div");
     item.className = "foto";
 
+    if (selecionadas.includes(foto.nome)) {
+      item.classList.add("selecionada");
+    }
+
     const img = document.createElement("img");
-    img.src = nome;
-    img.alt = "Referência " + i;
+
+    img.src = foto.nome;
+    img.alt = foto.nome;
     img.loading = "lazy";
 
     img.onerror = function() {
@@ -174,27 +254,30 @@ function carregarFotos() {
     item.appendChild(check);
 
     item.onclick = function() {
-      selecionar(nome, item);
+      selecionar(foto.nome, item);
     };
 
     galeria.appendChild(item);
-  }
+
+  });
+
 }
 
 function selecionar(nome, item) {
 
   if (selecionadas.includes(nome)) {
 
-    selecionadas = selecionadas.filter(
-      foto => foto !== nome
-    );
+    selecionadas =
+      selecionadas.filter(foto => foto !== nome);
 
     item.classList.remove("selecionada");
 
   } else {
 
     selecionadas.push(nome);
+
     item.classList.add("selecionada");
+
   }
 
   atualizarContador();
@@ -202,8 +285,11 @@ function selecionar(nome, item) {
 
 function atualizarContador() {
 
-  const contador = document.getElementById("contador");
-  const enviar = document.getElementById("enviar");
+  const contador =
+    document.getElementById("contador");
+
+  const enviar =
+    document.getElementById("enviar");
 
   contador.textContent =
     selecionadas.length +
@@ -211,24 +297,34 @@ function atualizarContador() {
       ? " foto selecionada"
       : " fotos selecionadas");
 
-  enviar.disabled = selecionadas.length === 0;
+  enviar.disabled =
+    selecionadas.length === 0;
+}
+
+function filtrar(categoria, botao) {
+
+  document
+    .querySelectorAll(".filtros button")
+    .forEach(b => b.classList.remove("ativo"));
+
+  botao.classList.add("ativo");
+
+  mostrarFotos(categoria);
 }
 
 function enviar() {
 
-  const referencias = selecionadas
-    .map(nome => nome.replace("ref", "Referência ").replace(".jpg", ""))
-    .join("\n");
-
   const mensagem =
     "Olá! Estas são as referências que escolhi:\n\n" +
-    referencias;
+    selecionadas
+      .map(foto => "• " + foto.replace(".jpg", ""))
+      .join("\n");
 
-  const url =
+  window.open(
     "https://wa.me/?text=" +
-    encodeURIComponent(mensagem);
-
-  window.open(url, "_blank");
+    encodeURIComponent(mensagem),
+    "_blank"
+  );
 }
 
 carregarFotos();
