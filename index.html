@@ -7,7 +7,7 @@
 <title>Catálogo de Ensaios | Fê Garcia</title>
 
 <style>
-* {https://github.com/promptstudio104/prompt-studio-catalogo/pulls
+* {
   box-sizing: border-box;
 }
 
@@ -75,6 +75,7 @@ header p {
   break-inside: avoid;
   margin-bottom: 10px;
   position: relative;
+  cursor: pointer;
 }
 
 .foto img {
@@ -134,10 +135,12 @@ header p {
   padding: 12px 18px;
   border-radius: 30px;
   font-size: 14px;
+  cursor: pointer;
 }
 
 #enviar:disabled {
   opacity: .35;
+  cursor: default;
 }
 
 @media (min-width: 700px) {
@@ -162,13 +165,13 @@ header p {
 </header>
 
 <div class="filtros">
-  <button class="ativo" onclick="filtrar('todas',this)">Todas</button>
-  <button onclick="filtrar('aniversario',this)">Aniversário</button>
-  <button onclick="filtrar('academia',this)">Academia</button>
-  <button onclick="filtrar('profissional',this)">Profissional</button>
-  <button onclick="filtrar('lifestyle',this)">Lifestyle</button>
-  <button onclick="filtrar('luxo',this)">Luxo</button>
-  <button onclick="filtrar('clean',this)">Clean</button>
+  <button class="ativo" onclick="filtrar('todas', this)">Todas</button>
+  <button onclick="filtrar('aniversario', this)">Aniversário</button>
+  <button onclick="filtrar('academia', this)">Academia</button>
+  <button onclick="filtrar('profissional', this)">Profissional</button>
+  <button onclick="filtrar('lifestyle', this)">Lifestyle</button>
+  <button onclick="filtrar('luxo', this)">Luxo</button>
+  <button onclick="filtrar('clean', this)">Clean</button>
 </div>
 
 <div class="galeria" id="galeria"></div>
@@ -181,21 +184,41 @@ header p {
 <script>
 
 const categorias = {
-  aniversario: 25,
-  academia: 50,
-  profissional: 50,
-  lifestyle: 50,
-  luxo: 50,
-  clean: 50
-};
+  aniversario: {
+    pasta: "niver",
+    quantidade: 25,
+    prefixo: "aniv"
+  },
 
-const prefixos = {
-  aniversario: "ANI",
-  academia: "ACA",
-  profissional: "PRO",
-  lifestyle: "LIF",
-  luxo: "LUX",
-  clean: "CLE"
+  academia: {
+    pasta: "academia",
+    quantidade: 0,
+    prefixo: "acad"
+  },
+
+  profissional: {
+    pasta: "profissional",
+    quantidade: 0,
+    prefixo: "prof"
+  },
+
+  lifestyle: {
+    pasta: "estilo de vida",
+    quantidade: 0,
+    prefixo: "life"
+  },
+
+  luxo: {
+    pasta: "luxo",
+    quantidade: 0,
+    prefixo: "luxo"
+  },
+
+  clean: {
+    pasta: "limpar",
+    quantidade: 0,
+    prefixo: "clean"
+  }
 };
 
 let selecionadas = [];
@@ -203,23 +226,23 @@ let fotos = [];
 
 function carregarFotos() {
 
+  fotos = [];
+
   Object.keys(categorias).forEach(categoria => {
 
-    const quantidade = categorias[categoria];
-    const prefixo = prefixos[categoria];
+    const dados = categorias[categoria];
 
-    for(let i = 1; i <= quantidade; i++) {
+    for (let i = 1; i <= dados.quantidade; i++) {
 
-     const numero = String(i).padStart(3,"0");
+      const arquivo = dados.prefixo + i + ".jpg";
 
-const pasta = categoria === "aniversario" ? "niver" : categoria;
-  ? "aniv" + i + ".jpg"
-  : prefixo + numero + ".jpg";
-fotos.push({
-  categoria: categoria,
-  nome: arquivo,
-  src: pasta + "/" + arquivo
-});
+      fotos.push({
+        categoria: categoria,
+        nome: arquivo,
+        src: dados.pasta + "/" + arquivo,
+        id: categoria + "/" + arquivo
+      });
+
     }
 
   });
@@ -241,12 +264,13 @@ function mostrarFotos(categoria) {
     const item = document.createElement("div");
     item.className = "foto";
 
-    if(selecionadas.includes(foto.nome)) {
+    if (selecionadas.includes(foto.id)) {
       item.classList.add("selecionada");
     }
 
     const img = document.createElement("img");
     img.src = foto.src;
+    img.alt = foto.nome;
     img.loading = "lazy";
 
     img.onerror = function() {
@@ -261,7 +285,7 @@ function mostrarFotos(categoria) {
     item.appendChild(check);
 
     item.onclick = function() {
-      selecionar(foto.nome,item);
+      selecionar(foto.id, item);
     };
 
     galeria.appendChild(item);
@@ -269,14 +293,18 @@ function mostrarFotos(categoria) {
   });
 }
 
-function selecionar(nome,item) {
+function selecionar(id, item) {
 
-  if(selecionadas.includes(nome)) {
-    selecionadas = selecionadas.filter(f => f !== nome);
+  if (selecionadas.includes(id)) {
+
+    selecionadas = selecionadas.filter(f => f !== id);
     item.classList.remove("selecionada");
+
   } else {
-    selecionadas.push(nome);
+
+    selecionadas.push(id);
     item.classList.add("selecionada");
+
   }
 
   atualizarContador();
@@ -296,7 +324,7 @@ function atualizarContador() {
   enviar.disabled = selecionadas.length === 0;
 }
 
-function filtrar(categoria,botao) {
+function filtrar(categoria, botao) {
 
   document.querySelectorAll(".filtros button")
     .forEach(b => b.classList.remove("ativo"));
@@ -309,13 +337,14 @@ function filtrar(categoria,botao) {
 function enviar() {
 
   const texto =
-    "Olá! Estas são as referências que escolhi:%0A%0A" +
-    selecionadas.map(f => "• " + f).join("%0A");
+    "Olá! Estas são as referências que escolhi:\n\n" +
+    selecionadas.map(f => "• " + f).join("\n");
 
-  window.open(
-    "https://wa.me/?text=" + texto,
-    "_blank"
-  );
+  const url =
+    "https://wa.me/?text=" +
+    encodeURIComponent(texto);
+
+  window.open(url, "_blank");
 }
 
 carregarFotos();
