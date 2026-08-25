@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Escolha suas referências | Fê Garcia</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f4f1;
+  color: #262626;
+}
+
+header {
+  padding: 35px 20px 25px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+}
+
+header p {
+  margin: 10px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.galeria {
+  padding: 0 12px 100px;
+  columns: 2;
+  column-gap: 10px;
+}
+
+.foto {
+  position: relative;
+  margin-bottom: 10px;
+  break-inside: avoid;
+  cursor: pointer;
+}
+
+.foto img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.foto.selecionada img {
+  outline: 4px solid #222;
+  outline-offset: -4px;
+}
+
+.check {
+  display: none;
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #222;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.foto.selecionada .check {
+  display: flex;
+}
+
+.barra {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,.97);
+  border-top: 1px solid #ddd;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+
+#contador {
+  font-size: 14px;
+  color: #555;
+}
+
+#enviar {
+  border: none;
+  background: #222;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#enviar:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+@media (min-width: 700px) {
+  .galeria {
+    columns: 3;
+    max-width: 1100px;
+    margin: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Escolha suas referências</h1>
+  <p>Toque nas fotos que você mais gostou.</p>
+</header>
+
+<div class="galeria" id="galeria"></div>
+
+<div class="barra">
+  <span id="contador">0 fotos selecionadas</span>
+  <button id="enviar" disabled onclick="enviar()">
+    Enviar escolhas
+  </button>
+</div>
+
+<script>
+
+const MAX_FOTOS = 200;
+
+let selecionadas = [];
+
+function carregarFotos() {
+
+  const galeria = document.getElementById("galeria");
+
+  for (let i = 1; i <= MAX_FOTOS; i++) {
+
+    const nome = "ref" + i + ".jpg";
+
+    const item = document.createElement("div");
+    item.className = "foto";
+
+    const img = document.createElement("img");
+    img.src = nome;
+    img.alt = "Referência " + i;
+    img.loading = "lazy";
+
+    img.onerror = function() {
+      item.remove();
+    };
+
+    const check = document.createElement("div");
+    check.className = "check";
+    check.innerHTML = "✓";
+
+    item.appendChild(img);
+    item.appendChild(check);
+
+    item.onclick = function() {
+      selecionar(nome, item);
+    };
+
+    galeria.appendChild(item);
+  }
+}
+
+function selecionar(nome, item) {
+
+  if (selecionadas.includes(nome)) {
+
+    selecionadas = selecionadas.filter(
+      foto => foto !== nome
+    );
+
+    item.classList.remove("selecionada");
+
+  } else {
+
+    selecionadas.push(nome);
+    item.classList.add("selecionada");
+  }
+
+  atualizarContador();
+}
+
+function atualizarContador() {
+
+  const contador = document.getElementById("contador");
+  const enviar = document.getElementById("enviar");
+
+  contador.textContent =
+    selecionadas.length +
+    (selecionadas.length === 1
+      ? " foto selecionada"
+      : " fotos selecionadas");
+
+  enviar.disabled = selecionadas.length === 0;
+}
+
+function enviar() {
+
+  const referencias = selecionadas
+    .map(nome => nome.replace("ref", "Referência ").replace(".jpg", ""))
+    .join("\n");
+
+  const mensagem =
+    "Olá! Estas são as referências que escolhi:\n\n" +
+    referencias;
+
+  const url =
+    "https://wa.me/?text=" +
+    encodeURIComponent(mensagem);
+
+  window.open(url, "_blank");
+}
+
+carregarFotos();
+
+</script>
+
+</body>
+</html>
