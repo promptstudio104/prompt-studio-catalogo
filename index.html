@@ -212,12 +212,11 @@ function carregarFotos() {
 
      const numero = String(i).padStart(3,"0");
 
-const pasta = categoria === "aniversario" ? "aniversário" : categoria;
+const pasta = categoria;
 
 const arquivo = categoria === "aniversario"
-  ? "aniversário-" + String(i).padStart(2,"0") + ".jpg"
+  ? "aniversario-" + String(i).padStart(2,"0") + ".jpg"
   : prefixo + numero + ".jpg";
-
 fotos.push({
   categoria: categoria,
   nome: arquivo,
