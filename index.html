@@ -39,6 +39,9 @@ header p {
   font-size: 14px;
 }
 
+
+/* FILTROS */
+
 .filtros {
   display: flex;
   gap: 9px;
@@ -69,6 +72,9 @@ header p {
   border-color: #222;
 }
 
+
+/* GALERIA */
+
 .galeria {
   padding: 0 12px 100px;
   columns: 2;
@@ -88,6 +94,9 @@ header p {
   display: block;
   border-radius: 12px;
 }
+
+
+/* FOTO SELECIONADA */
 
 .foto.selecionada img {
   outline: 4px solid #222;
@@ -113,6 +122,9 @@ header p {
 .foto.selecionada .check {
   display: flex;
 }
+
+
+/* BARRA INFERIOR */
 
 .barra {
   position: fixed;
@@ -148,6 +160,9 @@ header p {
   cursor: default;
 }
 
+
+/* COMPUTADOR */
+
 @media (min-width: 700px) {
 
   .galeria {
@@ -157,6 +172,9 @@ header p {
   }
 
 }
+
+
+/* CELULAR */
 
 @media (max-width: 699px) {
 
@@ -176,87 +194,84 @@ header p {
 
 <header>
 
-<h1>Escolha suas referências</h1>
+  <h1>Escolha suas referências</h1>
 
-<p>Toque nas fotos que você mais gostou.</p>
+  <p>Toque nas fotos que você mais gostou.</p>
 
 </header>
 
 
 <div class="filtros">
 
-<button
-class="ativo"
-onclick="filtrar('todas', this)">
-Todas
-</button>
+  <button
+    class="ativo"
+    onclick="filtrar('todas', this)">
+    Todas
+  </button>
 
+  <button
+    onclick="filtrar('aniversario', this)">
+    Aniversário
+  </button>
 
-<button
-onclick="filtrar('aniversario', this)">
-Aniversário
-</button>
+  <button
+    onclick="filtrar('academia', this)">
+    Academia
+  </button>
 
+  <button
+    onclick="filtrar('profissional', this)">
+    Profissional
+  </button>
 
-<button
-onclick="filtrar('academia', this)">
-Academia
-</button>
+  <button
+    onclick="filtrar('vida', this)">
+    Vida
+  </button>
 
+  <button
+    onclick="filtrar('luxo', this)">
+    Luxo
+  </button>
 
-<button
-onclick="filtrar('profissional', this)">
-Profissional
-</button>
-
-
-<button
-onclick="filtrar('vida', this)">
-Vida
-</button>
-
-
-<button
-onclick="filtrar('luxo', this)">
-Luxo
-</button>
-
-
-<button
-onclick="filtrar('clean', this)">
-Clean
-</button>
-
+  <button
+    onclick="filtrar('clean', this)">
+    Clean
+  </button>
 
 </div>
 
 
 <div
-class="galeria"
-id="galeria">
+  class="galeria"
+  id="galeria">
 </div>
 
 
 <div class="barra">
 
-<span id="contador">
-0 fotos selecionadas
-</span>
+  <span id="contador">
+    0 fotos selecionadas
+  </span>
 
-<button
-id="enviar"
-disabled
-onclick="enviar()">
+  <button
+    id="enviar"
+    disabled
+    onclick="enviar()">
 
-Enviar escolhas
+    Enviar escolhas
 
-</button>
+  </button>
 
 </div>
 
 
 <script>
 
+
+/* ========================================
+   CATEGORIAS E NOMES DOS ARQUIVOS
+======================================== */
 
 const categorias = {
 
@@ -293,6 +308,14 @@ const categorias = {
 };
 
 
+/*
+O catálogo procura até 100 arquivos
+de cada categoria.
+
+Os arquivos que não existem
+não aparecem.
+*/
+
 const MAXIMO = 100;
 
 
@@ -301,6 +324,10 @@ let fotos = [];
 let selecionadas = [];
 
 
+/* ========================================
+   CARREGAR FOTOS
+======================================== */
+
 function carregarFotos() {
 
 
@@ -308,15 +335,15 @@ function carregarFotos() {
 
 
     const configuracao =
-    categorias[categoria];
+      categorias[categoria];
 
 
     const prefixo =
-    configuracao.prefixo;
+      configuracao.prefixo;
 
 
     const extensao =
-    configuracao.extensao;
+      configuracao.extensao;
 
 
     for (
@@ -327,10 +354,10 @@ function carregarFotos() {
 
 
       const nome =
-      prefixo +
-      i +
-      "." +
-      extensao;
+        prefixo +
+        i +
+        "." +
+        extensao;
 
 
       fotos.push({
@@ -354,33 +381,37 @@ function carregarFotos() {
 }
 
 
+/* ========================================
+   MOSTRAR FOTOS
+======================================== */
 
 function mostrarFotos(categoria) {
 
 
   const galeria =
-  document.getElementById("galeria");
+    document.getElementById("galeria");
 
 
   galeria.innerHTML = "";
 
 
   const lista =
-  categoria === "todas"
 
-  ? fotos
+    categoria === "todas"
 
-  : fotos.filter(
-      foto =>
-      foto.categoria === categoria
-    );
+      ? fotos
+
+      : fotos.filter(
+          foto =>
+            foto.categoria === categoria
+        );
 
 
   lista.forEach(foto => {
 
 
     const item =
-    document.createElement("div");
+      document.createElement("div");
 
 
     item.className = "foto";
@@ -398,7 +429,7 @@ function mostrarFotos(categoria) {
 
 
     const img =
-    document.createElement("img");
+      document.createElement("img");
 
 
     img.src = foto.nome;
@@ -408,6 +439,11 @@ function mostrarFotos(categoria) {
     img.loading = "lazy";
 
 
+    /*
+    Se a imagem não existir,
+    ela é removida automaticamente.
+    */
+
     img.onerror = function() {
 
       item.remove();
@@ -416,7 +452,7 @@ function mostrarFotos(categoria) {
 
 
     const check =
-    document.createElement("div");
+      document.createElement("div");
 
 
     check.className = "check";
@@ -448,6 +484,9 @@ function mostrarFotos(categoria) {
 }
 
 
+/* ========================================
+   SELECIONAR
+======================================== */
 
 function selecionar(nome, item) {
 
@@ -458,9 +497,9 @@ function selecionar(nome, item) {
 
 
     selecionadas =
-    selecionadas.filter(
-      foto => foto !== nome
-    );
+      selecionadas.filter(
+        foto => foto !== nome
+      );
 
 
     item.classList.remove(
@@ -488,42 +527,48 @@ function selecionar(nome, item) {
 }
 
 
+/* ========================================
+   CONTADOR
+======================================== */
 
 function atualizarContador() {
 
 
   const contador =
-  document.getElementById(
-    "contador"
-  );
+    document.getElementById(
+      "contador"
+    );
 
 
   const enviar =
-  document.getElementById(
-    "enviar"
-  );
+    document.getElementById(
+      "enviar"
+    );
 
 
   contador.textContent =
 
-  selecionadas.length +
+    selecionadas.length +
 
-  (
-    selecionadas.length === 1
+    (
+      selecionadas.length === 1
 
-    ? " foto selecionada"
+        ? " foto selecionada"
 
-    : " fotos selecionadas"
-  );
+        : " fotos selecionadas"
+    );
 
 
   enviar.disabled =
-  selecionadas.length === 0;
+    selecionadas.length === 0;
 
 
 }
 
 
+/* ========================================
+   FILTROS
+======================================== */
 
 function filtrar(
   categoria,
@@ -532,15 +577,15 @@ function filtrar(
 
 
   document
-  .querySelectorAll(
-    ".filtros button"
-  )
-  .forEach(
-    b =>
-    b.classList.remove(
-      "ativo"
+    .querySelectorAll(
+      ".filtros button"
     )
-  );
+    .forEach(
+      b =>
+        b.classList.remove(
+          "ativo"
+        )
+    );
 
 
   botao.classList.add(
@@ -556,39 +601,49 @@ function filtrar(
 }
 
 
+/* ========================================
+   ENVIAR ESCOLHAS
+======================================== */
 
 function enviar() {
 
 
   const lista =
-  selecionadas
-  .slice()
-  .sort();
+    selecionadas
+      .slice()
+      .sort(
+        (a, b) =>
+          a.localeCompare(
+            b,
+            undefined,
+            { numeric: true }
+          )
+      );
 
 
   const mensagem =
 
-  "Olá! Estas são as referências que escolhi:\n\n" +
+    "Olá! Estas são as referências que escolhi:\n\n" +
 
-  lista
-  .map(
-    foto =>
-    "• " +
-    foto.replace(
-      /\.(jpg|jpeg|png)$/i,
-      ""
-    )
-  )
-  .join("\n");
+    lista
+      .map(
+        foto =>
+          "• " +
+          foto.replace(
+            /\.(jpg|jpeg|png)$/i,
+            ""
+          )
+      )
+      .join("\n");
 
 
   const url =
 
-  "https://wa.me/?text=" +
+    "https://wa.me/?text=" +
 
-  encodeURIComponent(
-    mensagem
-  );
+    encodeURIComponent(
+      mensagem
+    );
 
 
   window.open(
@@ -600,6 +655,9 @@ function enviar() {
 }
 
 
+/* ========================================
+   INICIAR
+======================================== */
 
 carregarFotos();
 
