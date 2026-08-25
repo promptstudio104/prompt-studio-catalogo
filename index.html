@@ -7,7 +7,7 @@
 <title>Catálogo de Ensaios | Fê Garcia</title>
 
 <style>
-* {
+* {https://github.com/promptstudio104/prompt-studio-catalogo/pulls
   box-sizing: border-box;
 }
 
@@ -181,7 +181,7 @@ header p {
 <script>
 
 const categorias = {
-  aniversario: 50,
+  aniversario: 30,
   academia: 50,
   profissional: 50,
   lifestyle: 50,
@@ -210,14 +210,19 @@ function carregarFotos() {
 
     for(let i = 1; i <= quantidade; i++) {
 
-      const numero = String(i).padStart(3,"0");
+     const numero = String(i).padStart(3,"0");
 
-      fotos.push({
-        categoria: categoria,
-        nome: prefixo + numero + ".jpg",
-        src: categoria + "/" + prefixo + numero + ".jpg"
-      });
+const pasta = categoria === "aniversario" ? "aniversário" : categoria;
 
+const arquivo = categoria === "aniversario"
+  ? "aniversário-" + String(i).padStart(2,"0") + ".jpg"
+  : prefixo + numero + ".jpg";
+
+fotos.push({
+  categoria: categoria,
+  nome: arquivo,
+  src: pasta + "/" + arquivo
+});
     }
 
   });
