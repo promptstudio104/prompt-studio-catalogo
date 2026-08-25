@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Catálogo de Ensaios | Fê Garcia</title>
@@ -258,9 +257,7 @@ header p {
     id="enviar"
     disabled
     onclick="enviar()">
-
     Enviar escolhas
-
   </button>
 
 </div>
@@ -270,7 +267,7 @@ header p {
 
 
 /* ========================================
-   CATEGORIAS E NOMES DOS ARQUIVOS
+   CONFIGURAÇÃO DAS CATEGORIAS
 ======================================== */
 
 const categorias = {
@@ -308,19 +305,12 @@ const categorias = {
 };
 
 
-/*
-O catálogo procura até 100 arquivos
-de cada categoria.
+/* MÁXIMO DE 30 FOTOS POR CATEGORIA */
 
-Os arquivos que não existem
-não aparecem.
-*/
-
-const MAXIMO = 100;
+const MAXIMO = 30;
 
 
 let fotos = [];
-
 let selecionadas = [];
 
 
@@ -330,28 +320,16 @@ let selecionadas = [];
 
 function carregarFotos() {
 
-
   Object.keys(categorias).forEach(categoria => {
 
+    const configuracao = categorias[categoria];
 
-    const configuracao =
-      categorias[categoria];
+    const prefixo = configuracao.prefixo;
 
-
-    const prefixo =
-      configuracao.prefixo;
+    const extensao = configuracao.extensao;
 
 
-    const extensao =
-      configuracao.extensao;
-
-
-    for (
-      let i = 1;
-      i <= MAXIMO;
-      i++
-    ) {
-
+    for (let i = 1; i <= MAXIMO; i++) {
 
       const nome =
         prefixo +
@@ -363,20 +341,16 @@ function carregarFotos() {
       fotos.push({
 
         categoria: categoria,
-
         nome: nome
 
       });
 
-
     }
-
 
   });
 
 
   mostrarFotos("todas");
-
 
 }
 
@@ -387,7 +361,6 @@ function carregarFotos() {
 
 function mostrarFotos(categoria) {
 
-
   const galeria =
     document.getElementById("galeria");
 
@@ -396,19 +369,14 @@ function mostrarFotos(categoria) {
 
 
   const lista =
-
     categoria === "todas"
-
       ? fotos
-
       : fotos.filter(
-          foto =>
-            foto.categoria === categoria
+          foto => foto.categoria === categoria
         );
 
 
   lista.forEach(foto => {
-
 
     const item =
       document.createElement("div");
@@ -417,13 +385,9 @@ function mostrarFotos(categoria) {
     item.className = "foto";
 
 
-    if (
-      selecionadas.includes(foto.nome)
-    ) {
+    if (selecionadas.includes(foto.nome)) {
 
-      item.classList.add(
-        "selecionada"
-      );
+      item.classList.add("selecionada");
 
     }
 
@@ -440,8 +404,8 @@ function mostrarFotos(categoria) {
 
 
     /*
-    Se a imagem não existir,
-    ela é removida automaticamente.
+    Se o arquivo não existir,
+    ele simplesmente não aparece.
     */
 
     img.onerror = function() {
@@ -477,52 +441,36 @@ function mostrarFotos(categoria) {
 
     galeria.appendChild(item);
 
-
   });
-
 
 }
 
 
 /* ========================================
-   SELECIONAR
+   SELECIONAR FOTO
 ======================================== */
 
 function selecionar(nome, item) {
 
-
-  if (
-    selecionadas.includes(nome)
-  ) {
-
+  if (selecionadas.includes(nome)) {
 
     selecionadas =
       selecionadas.filter(
         foto => foto !== nome
       );
 
-
-    item.classList.remove(
-      "selecionada"
-    );
-
+    item.classList.remove("selecionada");
 
   } else {
 
-
     selecionadas.push(nome);
 
-
-    item.classList.add(
-      "selecionada"
-    );
-
+    item.classList.add("selecionada");
 
   }
 
 
   atualizarContador();
-
 
 }
 
@@ -533,28 +481,19 @@ function selecionar(nome, item) {
 
 function atualizarContador() {
 
-
   const contador =
-    document.getElementById(
-      "contador"
-    );
+    document.getElementById("contador");
 
 
   const enviar =
-    document.getElementById(
-      "enviar"
-    );
+    document.getElementById("enviar");
 
 
   contador.textContent =
-
     selecionadas.length +
-
     (
       selecionadas.length === 1
-
         ? " foto selecionada"
-
         : " fotos selecionadas"
     );
 
@@ -562,51 +501,35 @@ function atualizarContador() {
   enviar.disabled =
     selecionadas.length === 0;
 
-
 }
 
 
 /* ========================================
-   FILTROS
+   FILTRAR CATEGORIA
 ======================================== */
 
-function filtrar(
-  categoria,
-  botao
-) {
-
+function filtrar(categoria, botao) {
 
   document
-    .querySelectorAll(
-      ".filtros button"
-    )
+    .querySelectorAll(".filtros button")
     .forEach(
-      b =>
-        b.classList.remove(
-          "ativo"
-        )
+      b => b.classList.remove("ativo")
     );
 
 
-  botao.classList.add(
-    "ativo"
-  );
+  botao.classList.add("ativo");
 
 
-  mostrarFotos(
-    categoria
-  );
-
+  mostrarFotos(categoria);
 
 }
 
 
 /* ========================================
-   ENVIAR ESCOLHAS
+   ENVIAR ESCOLHAS PELO WHATSAPP
 ======================================== */
 
 function enviar() {
-
 
   const lista =
     selecionadas
@@ -622,7 +545,6 @@ function enviar() {
 
 
   const mensagem =
-
     "Olá! Estas são as referências que escolhi:\n\n" +
 
     lista
@@ -638,12 +560,8 @@ function enviar() {
 
 
   const url =
-
     "https://wa.me/?text=" +
-
-    encodeURIComponent(
-      mensagem
-    );
+    encodeURIComponent(mensagem);
 
 
   window.open(
@@ -651,12 +569,11 @@ function enviar() {
     "_blank"
   );
 
-
 }
 
 
 /* ========================================
-   INICIAR
+   INICIAR CATÁLOGO
 ======================================== */
 
 carregarFotos();
