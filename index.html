@@ -1,619 +1,757 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>Prompt Studio | Catálogo</title>
 
 <style>
+
+/* =========================
+   CONFIGURAÇÕES GERAIS
+========================= */
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f7f5f3;
-    color: #222;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f5f3;
+  color: #222;
 }
 
+
+/* =========================
+   CABEÇALHO
+========================= */
+
 header {
-    text-align: center;
-    padding: 35px 20px 20px;
+  text-align: center;
+  padding: 40px 20px 25px;
 }
 
 header h1 {
-    margin: 0 0 10px;
-    font-size: 30px;
+  margin: 0 0 10px;
+  font-size: 30px;
+  letter-spacing: 1px;
 }
 
 header p {
-    margin: 0;
-    color: #666;
-    line-height: 1.5;
+  margin: 0;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
-.categorias {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 20px;
-}
 
-.categorias button {
-    border: 1px solid #222;
-    background: white;
-    color: #222;
-    padding: 10px 16px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.categorias button.ativo {
-    background: #222;
-    color: white;
-}
+/* =========================
+   TEXTO DE ORIENTAÇÃO
+========================= */
 
 .aviso {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    padding: 0 20px 20px;
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  padding: 0 20px 30px;
 }
+
+
+/* =========================
+   GALERIA
+========================= */
 
 .galeria {
-    width: min(1200px, 94%);
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 12px;
-    padding-bottom: 120px;
+  width: min(1200px, 94%);
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(180px, 1fr)
+    );
+
+  gap: 14px;
+
+  padding-bottom: 130px;
 }
 
+
+/* =========================
+   FOTO
+========================= */
+
 .foto {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    border: 3px solid transparent;
-    background: #eee;
+  position: relative;
+
+  aspect-ratio: 4 / 5;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  border: 3px solid transparent;
+
+  background: #ece8e5;
+
+  transition: 0.2s;
+}
+
+.foto:hover {
+  transform: scale(1.01);
 }
 
 .foto img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
 }
 
+
+/* =========================
+   FOTO SELECIONADA
+========================= */
+
 .foto.selecionada {
-    border-color: #111;
+  border-color: #111;
 }
 
 .check {
-    display: none;
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+  display: none;
+
+  position: absolute;
+
+  top: 9px;
+  right: 9px;
+
+  width: 32px;
+  height: 32px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+  font-size: 17px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
 }
 
 .foto.selecionada .check {
-    display: flex;
+  display: flex;
 }
+
+
+/* =========================
+   NOME DA REFERÊNCIA
+========================= */
 
 .nome {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 25px 8px 8px;
-    text-align: center;
-    color: white;
-    font-size: 12px;
-    background: linear-gradient(transparent, rgba(0,0,0,.7));
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  padding: 30px 10px 10px;
+
+  color: white;
+
+  text-align: center;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,.72)
+    );
 }
 
-.sem-fotos {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 50px 20px;
-    color: #777;
+
+/* =========================
+   CARREGANDO
+========================= */
+
+.status {
+  grid-column: 1 / -1;
+
+  text-align: center;
+
+  color: #777;
+
+  padding: 50px 20px;
+
+  font-size: 15px;
 }
+
+
+/* =========================
+   BARRA INFERIOR
+========================= */
 
 .barra {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    border-top: 1px solid #ddd;
-    padding: 12px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    z-index: 100;
+  position: fixed;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: white;
+
+  border-top: 1px solid #ddd;
+
+  padding:
+    12px
+    20px
+    calc(12px + env(safe-area-inset-bottom));
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+
+  z-index: 100;
 }
 
 #contador {
-    font-weight: bold;
-    font-size: 14px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 #enviar {
-    border: 0;
-    background: #111;
-    color: white;
-    padding: 13px 20px;
-    border-radius: 30px;
-    cursor: pointer;
+  border: none;
+
+  background: #111;
+
+  color: white;
+
+  padding: 13px 22px;
+
+  border-radius: 30px;
+
+  font-size: 14px;
+
+  cursor: pointer;
 }
 
 #enviar:disabled {
-    background: #aaa;
+  background: #aaa;
+  cursor: default;
 }
+
+
+/* =========================
+   CELULAR
+========================= */
 
 @media (max-width: 600px) {
-    .galeria {
-        width: 96%;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 7px;
-    }
 
-    header h1 {
-        font-size: 25px;
-    }
+  header {
+    padding-top: 28px;
+  }
 
-    .categorias {
-        padding: 15px 10px 20px;
-    }
+  header h1 {
+    font-size: 25px;
+  }
 
-    .categorias button {
-        font-size: 13px;
-        padding: 9px 12px;
-    }
+  .galeria {
+    width: 96%;
 
-    .barra {
-        justify-content: space-between;
-    }
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 8px;
+  }
+
+  .foto {
+    border-radius: 8px;
+  }
+
+  .barra {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  #contador {
+    font-size: 13px;
+  }
+
+  #enviar {
+    padding: 12px 16px;
+  }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-    <h1>PROMPT STUDIO</h1>
-    <p>
-        Escolha suas referências favoritas.<br>
-        Toque nas fotos para selecionar.
-    </p>
+
+  <h1>PROMPT STUDIO</h1>
+
+  <p>
+    Escolha suas referências favoritas.<br>
+    Toque nas fotos para selecionar.
+  </p>
+
 </header>
 
-<div class="categorias">
-
-    <button class="ativo" data-cat="aniv">
-        Aniversário
-    </button>
-
-    <button data-cat="vida">
-        Vida
-    </button>
-
-    <button data-cat="acad">
-        Academia
-    </button>
-
-    <button data-cat="prof">
-        Profissional
-    </button>
-
-    <button data-cat="luxo">
-        Luxo
-    </button>
-
-</div>
 
 <div class="aviso">
-    Você pode selecionar fotos de categorias diferentes.
+  Você pode selecionar quantas referências quiser.
 </div>
 
-<div id="galeria" class="galeria"></div>
+
+<div
+  id="galeria"
+  class="galeria"
+>
+
+  <div class="status">
+    Carregando referências...
+  </div>
+
+</div>
+
 
 <div class="barra">
 
-    <div id="contador">
-        0 selecionadas
-    </div>
+  <div id="contador">
+    0 selecionadas
+  </div>
 
-    <button id="enviar" disabled>
-        Enviar escolhas
-    </button>
+  <button
+    id="enviar"
+    disabled
+  >
+    Enviar escolhas
+  </button>
 
 </div>
 
+
 <script>
 
-/*
-========================================
-CONFIGURAÇÃO
-========================================
+/* =========================
+   CONFIGURAÇÃO
+========================= */
 
-O catálogo procura até 50 fotos
-em cada categoria.
+const MAX_FOTOS = 200;
 
-Aniversário:
-aniv1.jpg até aniv50.jpg
-
-Vida:
-vida1.jpeg até vida50.jpeg
-
-Academia:
-acad1.jpg até acad50.jpg
-
-Profissional:
-prof1.jpg até prof50.jpg
-
-Luxo:
-luxo1.jpg até luxo50.jpg
-*/
-
-const categorias = {
-
-    aniv: {
-        prefixo: "aniv",
-        extensao: "jpg"
-    },
-
-    vida: {
-        prefixo: "vida",
-        extensao: "jpeg"
-    },
-
-    acad: {
-        prefixo: "acad",
-        extensao: "jpg"
-    },
-
-    prof: {
-        prefixo: "prof",
-        extensao: "jpg"
-    },
-
-    luxo: {
-        prefixo: "luxo",
-        extensao: "jpg"
-    }
-
-};
-
-const MAX_FOTOS = 50;
-
-let categoriaAtual = "aniv";
+const EXTENSOES = [
+  "jpg",
+  "jpeg",
+  "png",
+  "webp"
+];
 
 const selecionadas = new Set();
 
-const galeria = document.getElementById("galeria");
+const galeria =
+  document.getElementById("galeria");
 
-const contador = document.getElementById("contador");
+const contador =
+  document.getElementById("contador");
 
-const botaoEnviar = document.getElementById("enviar");
-
-
-/*
-========================================
-CRIAR FOTO
-========================================
-*/
-
-function criarFoto(arquivo) {
-
-    const item = document.createElement("div");
-
-    item.className = "foto";
-
-    item.dataset.arquivo = arquivo;
+const botaoEnviar =
+  document.getElementById("enviar");
 
 
-    const imagem = document.createElement("img");
+/* =========================
+   VERIFICAR IMAGEM
+========================= */
 
-    imagem.src = arquivo;
+function verificarImagem(src) {
 
-    imagem.alt = arquivo;
+  return new Promise(function(resolve) {
 
-    imagem.loading = "lazy";
+    const img = new Image();
 
-
-    /*
-    Se a imagem não existir no GitHub,
-    ela simplesmente não aparece.
-    */
-
-    imagem.onerror = function() {
-
-        item.remove();
-
-        verificarGaleriaVazia();
-
+    img.onload = function() {
+      resolve(src);
     };
 
+    img.onerror = function() {
+      resolve(null);
+    };
 
-    const check = document.createElement("div");
+    img.src = src;
 
-    check.className = "check";
+  });
 
-    check.textContent = "✓";
+}
 
 
-    const nome = document.createElement("div");
+/* =========================
+   PROCURAR REFERÊNCIA
+========================= */
 
-    nome.className = "nome";
+async function procurarReferencia(numero) {
 
-    nome.textContent = arquivo.replace(
-        /\.(jpg|jpeg|png|webp)$/i,
-        ""
+  for (
+    const extensao
+    of EXTENSOES
+  ) {
+
+    const arquivo =
+      "ref" +
+      numero +
+      "." +
+      extensao;
+
+    const resultado =
+      await verificarImagem(
+        arquivo
+      );
+
+    if (resultado) {
+
+      return {
+        numero: numero,
+        arquivo: resultado
+      };
+
+    }
+
+  }
+
+  return null;
+
+}
+
+
+/* =========================
+   CRIAR FOTO
+========================= */
+
+function criarFoto(ref) {
+
+  const item =
+    document.createElement("div");
+
+  item.className = "foto";
+
+  item.dataset.arquivo =
+    ref.arquivo;
+
+
+  const imagem =
+    document.createElement("img");
+
+  imagem.src =
+    ref.arquivo;
+
+  imagem.alt =
+    "Referência " +
+    ref.numero;
+
+  imagem.loading =
+    "lazy";
+
+
+  const check =
+    document.createElement("div");
+
+  check.className =
+    "check";
+
+  check.textContent =
+    "✓";
+
+
+  const nome =
+    document.createElement("div");
+
+  nome.className =
+    "nome";
+
+  nome.textContent =
+    "REF " +
+    ref.numero;
+
+
+  item.appendChild(
+    imagem
+  );
+
+  item.appendChild(
+    check
+  );
+
+  item.appendChild(
+    nome
+  );
+
+
+  item.addEventListener(
+    "click",
+    function() {
+
+      selecionarFoto(
+        ref,
+        item
+      );
+
+    }
+  );
+
+
+  return item;
+
+}
+
+
+/* =========================
+   CARREGAR REFERÊNCIAS
+========================= */
+
+async function carregarReferencias() {
+
+  galeria.innerHTML =
+    '<div class="status">Carregando referências...</div>';
+
+
+  const verificacoes = [];
+
+
+  for (
+    let numero = 1;
+    numero <= MAX_FOTOS;
+    numero++
+  ) {
+
+    verificacoes.push(
+      procurarReferencia(
+        numero
+      )
+    );
+
+  }
+
+
+  const resultados =
+    await Promise.all(
+      verificacoes
     );
 
 
-    item.appendChild(imagem);
+  const referencias =
+    resultados
+      .filter(function(item) {
 
-    item.appendChild(check);
+        return item !== null;
 
-    item.appendChild(nome);
+      })
+      .sort(function(a, b) {
+
+        return a.numero -
+               b.numero;
+
+      });
 
 
-    if (selecionadas.has(arquivo)) {
+  galeria.innerHTML =
+    "";
 
-        item.classList.add("selecionada");
+
+  if (
+    referencias.length === 0
+  ) {
+
+    galeria.innerHTML =
+      '<div class="status">' +
+      'Nenhuma referência encontrada.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  referencias.forEach(
+    function(ref) {
+
+      const foto =
+        criarFoto(ref);
+
+      galeria.appendChild(
+        foto
+      );
 
     }
-
-
-    item.addEventListener("click", function() {
-
-        selecionarFoto(arquivo, item);
-
-    });
-
-
-    return item;
+  );
 
 }
 
 
-/*
-========================================
-CARREGAR CATEGORIA
-========================================
-*/
+/* =========================
+   SELECIONAR FOTO
+========================= */
 
-function carregarCategoria(categoria) {
+function selecionarFoto(
+  ref,
+  elemento
+) {
 
-    categoriaAtual = categoria;
+  if (
+    selecionadas.has(
+      ref.numero
+    )
+  ) {
 
-    galeria.innerHTML = "";
+    selecionadas.delete(
+      ref.numero
+    );
 
+    elemento.classList.remove(
+      "selecionada"
+    );
 
-    const config = categorias[categoria];
+  }
 
+  else {
 
-    for (let numero = 1; numero <= MAX_FOTOS; numero++) {
+    selecionadas.add(
+      ref.numero
+    );
 
-        const arquivo =
-            config.prefixo +
-            numero +
-            "." +
-            config.extensao;
+    elemento.classList.add(
+      "selecionada"
+    );
 
-
-        const foto = criarFoto(arquivo);
-
-
-        galeria.appendChild(foto);
-
-    }
-
-
-    /*
-    Aguarda as imagens inexistentes
-    serem removidas.
-    */
-
-    setTimeout(verificarGaleriaVazia, 1500);
-
-}
+  }
 
 
-/*
-========================================
-VERIFICAR GALERIA
-========================================
-*/
-
-function verificarGaleriaVazia() {
-
-    const fotos =
-        galeria.querySelectorAll(".foto");
-
-
-    if (fotos.length === 0) {
-
-        galeria.innerHTML =
-            '<div class="sem-fotos">' +
-            'Nenhuma foto encontrada nesta categoria.' +
-            '</div>';
-
-    }
+  atualizarContador();
 
 }
 
 
-/*
-========================================
-SELECIONAR FOTO
-========================================
-*/
-
-function selecionarFoto(arquivo, elemento) {
-
-    if (selecionadas.has(arquivo)) {
-
-        selecionadas.delete(arquivo);
-
-        elemento.classList.remove("selecionada");
-
-    }
-
-    else {
-
-        selecionadas.add(arquivo);
-
-        elemento.classList.add("selecionada");
-
-    }
-
-
-    atualizarContador();
-
-}
-
-
-/*
-========================================
-CONTADOR
-========================================
-*/
+/* =========================
+   CONTADOR
+========================= */
 
 function atualizarContador() {
 
-    const quantidade = selecionadas.size;
+  const quantidade =
+    selecionadas.size;
 
 
-    if (quantidade === 1) {
+  if (
+    quantidade === 1
+  ) {
 
-        contador.textContent = "1 selecionada";
+    contador.textContent =
+      "1 selecionada";
 
-    }
+  }
 
-    else {
+  else {
 
-        contador.textContent =
-            quantidade + " selecionadas";
+    contador.textContent =
+      quantidade +
+      " selecionadas";
 
-    }
+  }
 
 
-    botaoEnviar.disabled =
-        quantidade === 0;
+  botaoEnviar.disabled =
+    quantidade === 0;
 
 }
 
 
-/*
-========================================
-BOTÕES DAS CATEGORIAS
-========================================
-*/
+/* =========================
+   WHATSAPP
+========================= */
 
-document
-    .querySelectorAll(".categorias button")
-    .forEach(function(botao) {
-
-        botao.addEventListener("click", function() {
-
-            document
-                .querySelectorAll(".categorias button")
-                .forEach(function(outroBotao) {
-
-                    outroBotao.classList.remove("ativo");
-
-                });
-
-
-            botao.classList.add("ativo");
-
-
-            carregarCategoria(
-                botao.dataset.cat
-            );
-
-        });
-
-    });
-
-
-/*
-========================================
-WHATSAPP
-========================================
-*/
-
-botaoEnviar.addEventListener("click", function() {
+botaoEnviar.addEventListener(
+  "click",
+  function() {
 
     const lista =
-        Array.from(selecionadas)
-        .sort(function(a, b) {
+      Array.from(
+        selecionadas
+      )
+      .sort(function(a, b) {
 
-            return a.localeCompare(
-                b,
-                undefined,
-                {
-                    numeric: true
-                }
-            );
+        return a - b;
 
-        });
+      });
 
 
-    const nomes =
-        lista.map(function(arquivo) {
+    const referencias =
+      lista.map(
+        function(numero) {
 
-            return "• " +
-                arquivo.replace(
-                    /\.(jpg|jpeg|png|webp)$/i,
-                    ""
-                );
+          return (
+            "• REF " +
+            numero
+          );
 
-        });
+        }
+      );
 
 
     const mensagem =
-        "Olá! Estas são as referências que escolhi:\n\n" +
-        nomes.join("\n");
+      "Olá! Estas são as referências que escolhi:\n\n" +
+      referencias.join("\n");
 
 
     const url =
-        "https://wa.me/?text=" +
-        encodeURIComponent(mensagem);
+      "https://wa.me/?text=" +
+      encodeURIComponent(
+        mensagem
+      );
 
 
-    window.open(url, "_blank");
+    window.open(
+      url,
+      "_blank"
+    );
 
-});
+  }
+);
 
 
-/*
-========================================
-INICIAR
-========================================
-*/
+/* =========================
+   INICIAR CATÁLOGO
+========================= */
 
-carregarCategoria("aniv");
+carregarReferencias();
 
 atualizarContador();
 
 </script>
 
+
 </body>
+
 </html>
