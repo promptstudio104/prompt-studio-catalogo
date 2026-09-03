@@ -4,181 +4,362 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Catálogo de Ensaios | Fê Garcia</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Prompt Studio | Catálogo</title>
+
 
 <style>
 
+/* ========================================
+   CONFIGURAÇÕES GERAIS
+======================================== */
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
 
 body {
-  margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f7f4f1;
-  color: #262626;
+  background: #f7f5f3;
+  color: #222;
+  min-height: 100vh;
 }
+
+
+/* ========================================
+   CABEÇALHO
+======================================== */
 
 header {
-  padding: 35px 20px 20px;
   text-align: center;
+  padding: 40px 20px 25px;
 }
+
 
 header h1 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
 }
+
 
 header p {
-  margin: 10px 0 0;
-  color: #777;
-  font-size: 14px;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 
-/* FILTROS */
+/* ========================================
+   CATEGORIAS
+======================================== */
 
-.filtros {
+.categorias {
   display: flex;
-  gap: 9px;
-  overflow-x: auto;
-  padding: 8px 16px 22px;
   justify-content: center;
-  scrollbar-width: none;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  padding: 10px 20px 30px;
 }
 
-.filtros::-webkit-scrollbar {
-  display: none;
-}
 
-.filtros button {
-  flex: 0 0 auto;
-  border: 1px solid #d9d2cc;
-  background: white;
-  color: #333;
+.categorias button {
+  border: 1px solid #222;
+  background: transparent;
+  color: #222;
+
+  padding: 11px 18px;
+
   border-radius: 30px;
-  padding: 10px 17px;
+
   font-size: 14px;
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
-.filtros button.ativo {
+
+.categorias button:hover {
   background: #222;
   color: white;
-  border-color: #222;
 }
 
 
-/* GALERIA */
+.categorias button.ativo {
+  background: #222;
+  color: white;
+}
+
+
+/* ========================================
+   AVISO
+======================================== */
+
+.aviso {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  padding: 0 20px 25px;
+}
+
+
+/* ========================================
+   GALERIA
+======================================== */
 
 .galeria {
-  padding: 0 12px 100px;
-  columns: 2;
-  column-gap: 10px;
+  width: min(1200px, 94%);
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(180px, 1fr)
+    );
+
+  gap: 15px;
+
+  padding-bottom: 140px;
 }
 
+
+/* ========================================
+   FOTO
+======================================== */
+
 .foto {
-  break-inside: avoid;
-  margin-bottom: 10px;
   position: relative;
+
+  background: #eee;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
   cursor: pointer;
+
+  aspect-ratio: 4 / 5;
+
+  border: 3px solid transparent;
+
+  transition: 0.2s;
 }
+
 
 .foto img {
   width: 100%;
-  height: auto;
+  height: 100%;
+
+  object-fit: cover;
+
   display: block;
-  border-radius: 12px;
 }
 
 
-/* FOTO SELECIONADA */
-
-.foto.selecionada img {
-  outline: 4px solid #222;
-  outline-offset: -4px;
+.foto:hover {
+  transform: scale(1.01);
 }
 
-.check {
-  display: none;
+
+/* ========================================
+   FOTO SELECIONADA
+======================================== */
+
+.foto.selecionada {
+  border-color: #111;
+}
+
+
+.marcador {
   position: absolute;
-  top: 9px;
-  right: 9px;
+
+  top: 10px;
+  right: 10px;
+
   width: 30px;
   height: 30px;
+
+  background: white;
+
   border-radius: 50%;
-  background: #222;
-  color: white;
+
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
+
   font-weight: bold;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,0.2);
+
+  opacity: 0;
+
+  transition: 0.2s;
 }
 
-.foto.selecionada .check {
-  display: flex;
+
+.foto.selecionada .marcador {
+  opacity: 1;
 }
 
 
-/* BARRA INFERIOR */
+/* ========================================
+   NOME DA FOTO
+======================================== */
 
-.barra {
-  position: fixed;
+.nome-foto {
+  position: absolute;
+
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255,255,255,.97);
+
+  padding: 25px 10px 9px;
+
+  color: white;
+
+  font-size: 12px;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,.65)
+    );
+}
+
+
+/* ========================================
+   BARRA INFERIOR
+======================================== */
+
+.barra {
+  position: fixed;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: white;
+
   border-top: 1px solid #ddd;
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+
+  padding:
+    12px
+    20px
+    calc(12px + env(safe-area-inset-bottom));
+
   display: flex;
+
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+
+  gap: 15px;
+
   z-index: 100;
 }
 
-#contador {
+
+.contador {
   font-size: 14px;
-  color: #555;
+  font-weight: bold;
 }
 
-#enviar {
+
+.enviar {
   border: none;
-  background: #222;
+
+  background: #111;
   color: white;
-  padding: 12px 20px;
+
+  padding: 13px 22px;
+
   border-radius: 30px;
+
   font-size: 14px;
+
   cursor: pointer;
 }
 
-#enviar:disabled {
-  opacity: .35;
+
+.enviar:disabled {
+  background: #bbb;
   cursor: default;
 }
 
 
-/* COMPUTADOR */
+/* ========================================
+   QUANDO NÃO HÁ FOTOS
+======================================== */
 
-@media (min-width: 700px) {
+.sem-fotos {
+  grid-column: 1 / -1;
 
-  .galeria {
-    columns: 3;
-    max-width: 1100px;
-    margin: auto;
-  }
+  text-align: center;
 
+  color: #777;
+
+  padding: 50px 20px;
 }
 
 
-/* CELULAR */
+/* ========================================
+   CELULAR
+======================================== */
 
-@media (max-width: 699px) {
+@media (max-width: 600px) {
 
-  .filtros {
-    justify-content: flex-start;
+  header {
+    padding-top: 28px;
+  }
+
+
+  header h1 {
+    font-size: 25px;
+  }
+
+
+  .galeria {
+    width: 96%;
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 8px;
+  }
+
+
+  .foto {
+    border-radius: 8px;
+  }
+
+
+  .categorias {
+    gap: 7px;
+  }
+
+
+  .categorias button {
+    padding: 9px 13px;
+    font-size: 13px;
+  }
+
+
+  .barra {
+    justify-content: space-between;
   }
 
 }
@@ -191,281 +372,536 @@ header p {
 <body>
 
 
+<!-- ========================================
+     CABEÇALHO
+======================================== -->
+
 <header>
 
-  <h1>Escolha suas referências</h1>
+  <h1>PROMPT STUDIO</h1>
 
-  <p>Toque nas fotos que você mais gostou.</p>
+  <p>
+    Escolha suas referências favoritas.<br>
+    Toque nas fotos para selecionar.
+  </p>
 
 </header>
 
 
-<div class="filtros">
+
+<!-- ========================================
+     BOTÕES DAS CATEGORIAS
+======================================== -->
+
+<div class="categorias">
 
   <button
     class="ativo"
-    onclick="filtrar('todas', this)">
-    Todas
-  </button>
-
-  <button
-    onclick="filtrar('aniversario', this)">
+    data-categoria="aniv"
+  >
     Aniversário
   </button>
 
-  <button
-    onclick="filtrar('academia', this)">
-    Academia
-  </button>
 
   <button
-    onclick="filtrar('profissional', this)">
-    Profissional
-  </button>
-
-  <button
-    onclick="filtrar('vida', this)">
+    data-categoria="vida"
+  >
     Vida
   </button>
 
+
   <button
-    onclick="filtrar('luxo', this)">
+    data-categoria="acad"
+  >
+    Academia
+  </button>
+
+
+  <button
+    data-categoria="prof"
+  >
+    Profissional
+  </button>
+
+
+  <button
+    data-categoria="luxo"
+  >
     Luxo
   </button>
 
-  <button
-    onclick="filtrar('clean', this)">
-    Clean
-  </button>
-
 </div>
 
+
+
+<div class="aviso">
+  Você pode escolher referências de categorias diferentes.
+</div>
+
+
+
+<!-- ========================================
+     GALERIA
+======================================== -->
 
 <div
+  id="galeria"
   class="galeria"
-  id="galeria">
-</div>
+></div>
 
+
+
+<!-- ========================================
+     BARRA INFERIOR
+======================================== -->
 
 <div class="barra">
 
-  <span id="contador">
-    0 fotos selecionadas
-  </span>
+  <div
+    id="contador"
+    class="contador"
+  >
+    0 selecionadas
+  </div>
+
 
   <button
-    id="enviar"
+    id="btnEnviar"
+    class="enviar"
+    onclick="enviar()"
     disabled
-    onclick="enviar()">
+  >
     Enviar escolhas
   </button>
 
 </div>
 
 
+
 <script>
 
-
 /* ========================================
-   CONFIGURAÇÃO DAS CATEGORIAS
+   CONFIGURAÇÕES DAS CATEGORIAS
 ======================================== */
+
+/*
+Cada categoria aceita até 50 fotos.
+
+O sistema procura automaticamente:
+
+.jpg
+.jpeg
+.png
+.webp
+
+Portanto:
+
+aniv1.jpg
+vida1.jpeg
+acad1.png
+
+podem funcionar normalmente.
+*/
 
 const categorias = {
 
-  aniversario: {
-    prefixo: "aniv",
-    extensao: "jpg"
-  },
-
-  academia: {
-    prefixo: "acad",
-    extensao: "jpg"
-  },
-
-  profissional: {
-    prefixo: "prof",
-    extensao: "jpg"
+  aniv: {
+    nome: "Aniversário",
+    prefixo: "aniv"
   },
 
   vida: {
-    prefixo: "vida",
-    extensao: "jpeg"
+    nome: "Vida",
+    prefixo: "vida"
+  },
+
+  acad: {
+    nome: "Academia",
+    prefixo: "acad"
+  },
+
+  prof: {
+    nome: "Profissional",
+    prefixo: "prof"
   },
 
   luxo: {
-    prefixo: "luxo",
-    extensao: "jpg"
-  },
-
-  clean: {
-    prefixo: "clean",
-    extensao: "jpg"
+    nome: "Luxo",
+    prefixo: "luxo"
   }
 
 };
 
 
-/* MÁXIMO DE 30 FOTOS POR CATEGORIA */
 
-const MAXIMO = 30;
+const extensoes = [
+  "jpg",
+  "jpeg",
+  "png",
+  "webp"
+];
 
 
-let fotos = [];
-let selecionadas = [];
+const MAXIMO_FOTOS = 50;
+
 
 
 /* ========================================
-   CARREGAR FOTOS
+   VARIÁVEIS
 ======================================== */
 
-function carregarFotos() {
-
-  Object.keys(categorias).forEach(categoria => {
-
-    const configuracao = categorias[categoria];
-
-    const prefixo = configuracao.prefixo;
-
-    const extensao = configuracao.extensao;
+let categoriaAtual = "aniv";
 
 
-    for (let i = 1; i <= MAXIMO; i++) {
-
-      const nome =
-        prefixo +
-        i +
-        "." +
-        extensao;
+let selecionadas = [];
 
 
-      fotos.push({
+const cacheFotos = {};
 
-        categoria: categoria,
-        nome: nome
 
-      });
 
-    }
+/* ========================================
+   VERIFICAR SE UMA FOTO EXISTE
+======================================== */
+
+function verificarImagem(src) {
+
+  return new Promise(resolve => {
+
+    const imagem = new Image();
+
+
+    imagem.onload = function () {
+
+      resolve(src);
+
+    };
+
+
+    imagem.onerror = function () {
+
+      resolve(null);
+
+    };
+
+
+    imagem.src =
+      src +
+      "?v=" +
+      Date.now();
 
   });
 
+}
 
-  mostrarFotos("todas");
+
+
+/* ========================================
+   PROCURAR EXTENSÃO CORRETA
+======================================== */
+
+async function procurarFoto(prefixo, numero) {
+
+  for (
+    const extensao
+    of extensoes
+  ) {
+
+    const arquivo =
+      prefixo +
+      numero +
+      "." +
+      extensao;
+
+
+    const existe =
+      await verificarImagem(
+        arquivo
+      );
+
+
+    if (existe) {
+
+      return arquivo;
+
+    }
+
+  }
+
+
+  return null;
 
 }
+
+
+
+/* ========================================
+   CARREGAR FOTOS DA CATEGORIA
+======================================== */
+
+async function carregarFotosCategoria(categoria) {
+
+  if (cacheFotos[categoria]) {
+
+    return cacheFotos[categoria];
+
+  }
+
+
+  const configuracao =
+    categorias[categoria];
+
+
+  const fotos = [];
+
+
+  /*
+  Testa de 1 até 50.
+  Assim você pode adicionar novas fotos
+  sem precisar alterar o código.
+  */
+
+  const verificacoes = [];
+
+
+  for (
+    let numero = 1;
+    numero <= MAXIMO_FOTOS;
+    numero++
+  ) {
+
+    verificacoes.push(
+      procurarFoto(
+        configuracao.prefixo,
+        numero
+      )
+    );
+
+  }
+
+
+  const resultados =
+    await Promise.all(
+      verificacoes
+    );
+
+
+  resultados.forEach(
+    arquivo => {
+
+      if (arquivo) {
+
+        fotos.push(arquivo);
+
+      }
+
+    }
+  );
+
+
+  cacheFotos[categoria] =
+    fotos;
+
+
+  return fotos;
+
+}
+
 
 
 /* ========================================
    MOSTRAR FOTOS
 ======================================== */
 
-function mostrarFotos(categoria) {
+async function mostrarFotos(categoria) {
+
+  categoriaAtual =
+    categoria;
+
 
   const galeria =
-    document.getElementById("galeria");
+    document.getElementById(
+      "galeria"
+    );
+
+
+  galeria.innerHTML =
+    '<div class="sem-fotos">Carregando fotos...</div>';
+
+
+  const fotos =
+    await carregarFotosCategoria(
+      categoria
+    );
 
 
   galeria.innerHTML = "";
 
 
-  const lista =
-    categoria === "todas"
-      ? fotos
-      : fotos.filter(
-          foto => foto.categoria === categoria
+  if (fotos.length === 0) {
+
+    galeria.innerHTML =
+      '<div class="sem-fotos">Nenhuma foto encontrada nesta categoria.</div>';
+
+
+    return;
+
+  }
+
+
+  fotos.forEach(
+    arquivo => {
+
+      const item =
+        document.createElement(
+          "div"
         );
 
 
-  lista.forEach(foto => {
-
-    const item =
-      document.createElement("div");
+      item.className =
+        "foto";
 
 
-    item.className = "foto";
+      if (
+        selecionadas.includes(
+          arquivo
+        )
+      ) {
+
+        item.classList.add(
+          "selecionada"
+        );
+
+      }
 
 
-    if (selecionadas.includes(foto.nome)) {
-
-      item.classList.add("selecionada");
-
-    }
-
-
-    const img =
-      document.createElement("img");
+      const imagem =
+        document.createElement(
+          "img"
+        );
 
 
-    img.src = foto.nome;
-
-    img.alt = foto.nome;
-
-    img.loading = "lazy";
+      imagem.src =
+        arquivo;
 
 
-    /*
-    Se o arquivo não existir,
-    ele simplesmente não aparece.
-    */
-
-    img.onerror = function() {
-
-      item.remove();
-
-    };
+      imagem.alt =
+        arquivo;
 
 
-    const check =
-      document.createElement("div");
+      imagem.loading =
+        "lazy";
 
 
-    check.className = "check";
-
-    check.innerHTML = "✓";
-
-
-    item.appendChild(img);
-
-    item.appendChild(check);
+      const marcador =
+        document.createElement(
+          "div"
+        );
 
 
-    item.onclick = function() {
+      marcador.className =
+        "marcador";
 
-      selecionar(
-        foto.nome,
+
+      marcador.innerHTML =
+        "✓";
+
+
+      const nome =
+        document.createElement(
+          "div"
+        );
+
+
+      nome.className =
+        "nome-foto";
+
+
+      nome.textContent =
+        arquivo.replace(
+          /\.(jpg|jpeg|png|webp)$/i,
+          ""
+        );
+
+
+      item.appendChild(
+        imagem
+      );
+
+
+      item.appendChild(
+        marcador
+      );
+
+
+      item.appendChild(
+        nome
+      );
+
+
+      item.addEventListener(
+        "click",
+        function () {
+
+          selecionarFoto(
+            arquivo,
+            item
+          );
+
+        }
+      );
+
+
+      galeria.appendChild(
         item
       );
 
-    };
-
-
-    galeria.appendChild(item);
-
-  });
+    }
+  );
 
 }
 
 
+
 /* ========================================
-   SELECIONAR FOTO
+   SELECIONAR / DESSELECIONAR
 ======================================== */
 
-function selecionar(nome, item) {
+function selecionarFoto(
+  arquivo,
+  elemento
+) {
 
-  if (selecionadas.includes(nome)) {
+  const indice =
+    selecionadas.indexOf(
+      arquivo
+    );
 
-    selecionadas =
-      selecionadas.filter(
-        foto => foto !== nome
-      );
 
-    item.classList.remove("selecionada");
+  if (indice === -1) {
 
-  } else {
+    selecionadas.push(
+      arquivo
+    );
 
-    selecionadas.push(nome);
 
-    item.classList.add("selecionada");
+    elemento.classList.add(
+      "selecionada"
+    );
+
+  }
+
+  else {
+
+    selecionadas.splice(
+      indice,
+      1
+    );
+
+
+    elemento.classList.remove(
+      "selecionada"
+    );
 
   }
 
@@ -475,6 +911,7 @@ function selecionar(nome, item) {
 }
 
 
+
 /* ========================================
    CONTADOR
 ======================================== */
@@ -482,47 +919,83 @@ function selecionar(nome, item) {
 function atualizarContador() {
 
   const contador =
-    document.getElementById("contador");
+    document.getElementById(
+      "contador"
+    );
 
 
-  const enviar =
-    document.getElementById("enviar");
+  const botao =
+    document.getElementById(
+      "btnEnviar"
+    );
+
+
+  const quantidade =
+    selecionadas.length;
 
 
   contador.textContent =
-    selecionadas.length +
+    quantidade +
     (
-      selecionadas.length === 1
-        ? " foto selecionada"
-        : " fotos selecionadas"
+      quantidade === 1
+        ? " selecionada"
+        : " selecionadas"
     );
 
 
-  enviar.disabled =
-    selecionadas.length === 0;
+  botao.disabled =
+    quantidade === 0;
 
 }
+
 
 
 /* ========================================
-   FILTRAR CATEGORIA
+   TROCAR CATEGORIA
 ======================================== */
 
-function filtrar(categoria, botao) {
+document
+  .querySelectorAll(
+    ".categorias button"
+  )
+  .forEach(
+    botao => {
 
-  document
-    .querySelectorAll(".filtros button")
-    .forEach(
-      b => b.classList.remove("ativo")
-    );
+      botao.addEventListener(
+        "click",
+        function () {
+
+          document
+            .querySelectorAll(
+              ".categorias button"
+            )
+            .forEach(
+              b =>
+                b.classList.remove(
+                  "ativo"
+                )
+            );
 
 
-  botao.classList.add("ativo");
+          botao.classList.add(
+            "ativo"
+          );
 
 
-  mostrarFotos(categoria);
+          const categoria =
+            botao.dataset.categoria;
 
-}
+
+          mostrarFotos(
+            categoria
+          );
+
+        }
+      );
+
+    }
+  );
+
 
 
 /* ========================================
@@ -530,6 +1003,15 @@ function filtrar(categoria, botao) {
 ======================================== */
 
 function enviar() {
+
+  if (
+    selecionadas.length === 0
+  ) {
+
+    return;
+
+  }
+
 
   const lista =
     selecionadas
@@ -539,7 +1021,9 @@ function enviar() {
           a.localeCompare(
             b,
             undefined,
-            { numeric: true }
+            {
+              numeric: true
+            }
           )
       );
 
@@ -552,7 +1036,7 @@ function enviar() {
         foto =>
           "• " +
           foto.replace(
-            /\.(jpg|jpeg|png)$/i,
+            /\.(jpg|jpeg|png|webp)$/i,
             ""
           )
       )
@@ -561,7 +1045,9 @@ function enviar() {
 
   const url =
     "https://wa.me/?text=" +
-    encodeURIComponent(mensagem);
+    encodeURIComponent(
+      mensagem
+    );
 
 
   window.open(
@@ -572,11 +1058,17 @@ function enviar() {
 }
 
 
+
 /* ========================================
    INICIAR CATÁLOGO
 ======================================== */
 
-carregarFotos();
+mostrarFotos(
+  categoriaAtual
+);
+
+
+atualizarContador();
 
 
 </script>
